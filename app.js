@@ -26,6 +26,7 @@ var config = require('./config');
 const cors = require('cors');
 
 app.use(cors());
+app.set("trust proxy" ,1);
 
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird'); 
