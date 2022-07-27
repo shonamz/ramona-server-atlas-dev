@@ -13,10 +13,20 @@ var fs = require('fs');
 /**
  * Get port from environment and store in Express.
  */
+ require('dotenv').config();
 
 var port = normalizePort(process.env.CLIENT_URL || '3000');
+console.log("port",port);
+console.log(process.env.NODE_ENV)
+
 app.set('port', port);
 app.set('secPort',port+443);
+
+// if (process.env.NODE_ENV !== 'production') {
+//   require('dotenv').config();
+//   console.log(port);
+
+// }
 
 /**
  * Create HTTP server.
