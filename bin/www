@@ -21,12 +21,7 @@ console.log(process.env.NODE_ENV)
 
 app.set('port', port);
 app.set('secPort',port+443);
-
-// if (process.env.NODE_ENV !== 'production') {
-//   require('dotenv').config();
-//   console.log(port);
-
-// }
+ 
 
 /**
  * Create HTTP server.
