@@ -36,12 +36,14 @@ const Dishes = require('./models/dishes');
 const url = config.mongoUrl;
 
 
-const connect = mongoose.connect(url, {useMongoClient:true});
+const connect = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
+mongoose.set("useCreateIndex", true);
+
 
 // Secure traffic only
 app.all('*', (req, res, next) => {
