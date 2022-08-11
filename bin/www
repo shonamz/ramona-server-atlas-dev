@@ -7,20 +7,24 @@
 var app = require('../app');
 var debug = require('debug')('dishserver:server');
 var http = require('http');
-//var https = require('https');
+var https = require('https');
 var fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
  */
- require('dotenv').config();
+ 
+
+ if (process.env.NODE_ENV === 'production') {
+  require('dotenv').config();
+}
 
 var port = normalizePort(process.env.CLIENT_URL || '3000');
 console.log("port",port);
 console.log(process.env.NODE_ENV)
 
 app.set('port', port);
-//app.set('secPort',port+443);
+app.set('secPort',port+443);
  
 
 /**
@@ -28,8 +32,6 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-
-
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -39,23 +41,32 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-// var options = {
-//   key: fs.readFileSync(__dirname+'/private.key'),
-//   cert: fs.readFileSync(__dirname+'/certificate.pem')
-// };
+if (process.env.NODE_ENV === "production") {
+  require('dotenv').config();
+  var options = {
+  key: fs.readFileSync(path ='/etc/letsencrypt/live/ramona-kitchen.co/privkey.pem',options='utf5'),
+  cert: fs.readFileSync(path ='/etc/letsencrypt/live/ramona-kitchen.co/cert.pem',options='utf5')
+};
+}
 
-//var secureServer = https.createServer(options,app);
+
+var options = {
+  key: fs.readFileSync(__dirname+'/private.key'),
+  cert: fs.readFileSync(__dirname+'/certificate.pem')
+};
+
+var secureServer = https.createServer(options,app);
 
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-//  secureServer.listen(app.get('secPort'), () => {
-//   console.log('Server listening on port ',app.get('secPort'));
-// });
-// secureServer.on('error', onError);
-// secureServer.on('listening', onListening);
+ secureServer.listen(app.get('secPort'), () => {
+  console.log('Server listening on port ',app.get('secPort'));
+});
+secureServer.on('error', onError);
+secureServer.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
