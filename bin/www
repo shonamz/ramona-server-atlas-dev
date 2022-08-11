@@ -15,9 +15,9 @@ var fs = require('fs');
  */
  
 
- if (process.env.NODE_ENV === 'production') {
-  require('dotenv').config();
-}
+//  if (process.env.NODE_ENV === 'production') {
+  // require('dotenv').config();
+// }
 
 var port = normalizePort(process.env.CLIENT_URL || '3000');
 console.log("port",port);
@@ -41,19 +41,20 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-if (process.env.NODE_ENV === "production") {
+// if (process.env.NODE_ENV === "production") {
   require('dotenv').config();
+  
   var options = {
-  key: fs.readFileSync(path ='/etc/letsencrypt/live/ramona-kitchen.co/privkey.pem',options='utf5'),
-  cert: fs.readFileSync(path ='/etc/letsencrypt/live/ramona-kitchen.co/cert.pem',options='utf5')
+  key: fs.readFileSync(path ='/etc/letsencrypt/live/ramona-kitchen.co/privkey.pem',options='utf8'),
+  cert: fs.readFileSync(path ='/etc/letsencrypt/live/ramona-kitchen.co/cert.pem',options='utf8')
 };
-}
+// }
 
 
-var options = {
-  key: fs.readFileSync(__dirname+'/private.key'),
-  cert: fs.readFileSync(__dirname+'/certificate.pem')
-};
+// var options = {
+//   key: fs.readFileSync(__dirname+'/private.key'),
+//   cert: fs.readFileSync(__dirname+'/certificate.pem')
+// };
 
 var secureServer = https.createServer(options,app);
 
