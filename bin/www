@@ -11,17 +11,20 @@ var fs = require('fs');
 /**
  * Get port from environment and store in Express.
  */
+//  require('dotenv').config()
 
-var port = normalizePort(process.env.CLIENT_URL || '3000');
+
+var port = normalizePort(process.env.PORT || '3000');
+ 
 app.set('port', port);
-//app.set('secPort',port+443);
+ //app.set('secPort',port+443);
  
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app);
-
+ 
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -30,21 +33,18 @@ var server = http.createServer(app);
 // server.on('error', onError);
 // server.on('listening', onListening);
 
-// var options = {
-//   key: fs.readFileSync(__dirname+'/private.key'),
-//   cert: fs.readFileSync(__dirname+'/certificate.pem')
-// };
-
 var options = {
-  key: fs.readFileSync(path ='/etc/letsencrypt/live/ramona-kitchen.co/privkey.pem',options='utf8'),
-  cert: fs.readFileSync(path ='/etc/letsencrypt/live/ramona-kitchen.co/cert.pem',options='utf8')
+  key: fs.readFileSync(__dirname+'/private.key'),
+  cert: fs.readFileSync(__dirname+'/certificate.pem')
 };
+
+// var options = {
+//   key: fs.readFileSync(path ='/etc/letsencrypt/live/ramona-kitchen.co/privkey.pem',options='utf8'),
+//   cert: fs.readFileSync(path ='/etc/letsencrypt/live/ramona-kitchen.co/cert.pem',options='utf8')
+// };
 
 
 var secureServer = https.createServer(options,app);
-
- 
-
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -53,9 +53,11 @@ var secureServer = https.createServer(options,app);
   console.log('Server listening on port ',app.get('port'));
 });
 
-secureServer.on('error', onError);
-//secureServer.on('listening', onListening);
+ 
 
+secureServer.on('error', onError);
+secureServer.on('listening', onListening);
+ 
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -109,8 +111,8 @@ function onError(error) {
   */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  var addr = secureServer.address();
+   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
